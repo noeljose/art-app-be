@@ -1,0 +1,37 @@
+{
+  "name": "art-app-be",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start" : "node_modules/nodemon/bin/nodemon.js build/index.js",
+    "dev": "node_modules/nodemon/bin/nodemon.js src/index.ts",
+    "build" : "tsc -p"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/noeljose/art-app-be.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/noeljose/art-app-be/issues"
+  },
+  "homepage": "https://github.com/noeljose/art-app-be#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.0.13"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/mongoose": "^5.11.97",
+    "@types/node": "^16.11.10",
+    "nodemon": "^2.0.15",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.2"
+  }
+}
