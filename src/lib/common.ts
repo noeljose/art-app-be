@@ -1,10 +1,12 @@
-type numvar = number | string;
+//CUSTOME TYPES
+type naso = number | [] | string | object;
 
-export function empty(data:numvar):boolean{
+export function empty(data:naso):boolean{
 
-    if (data === null || data == "") {
+    if (typeof data == 'undefined') {
         return true
     }
-
     return false
 }
+
+

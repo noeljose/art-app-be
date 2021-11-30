@@ -1,15 +1,25 @@
 import express, {Application} from "express"
 import {response} from "../types";
 import {empty} from "../lib/common"
+import {SchemaTypes} from "mongoose"
 const products: Application = express()
 
 //MIDDLEWARES
-products.use(express.json())
+
 
 //MODELS
 import Category from "../models/Category"
 
 products.post("/category/:operation", async(req, res )=>{
+
+    let data = {
+        category : req.body.category,
+        subCategory : req.body.subCategory
+    }
+
+    
+
+
 
     let checkExist = await Category.findOne({category : req.body.category}) || false
 
@@ -17,33 +27,35 @@ products.post("/category/:operation", async(req, res )=>{
         status : false,
         message : "Somthing Went wrong"
     }
-    let data = {
-        category : req.body.category,
-        subCategory : req.body.subCategory
-    }
 
     let _id = req.body._id || ""
+    
 
     try {
+        
+
         switch (req.params.operation) {
 
 
             case "create":
+                if (empty(data.category) || empty(data.subCategory)) { response.message ="Please Fill all fields"; throw "error" }
+           
                 if (checkExist != false) {
                     response.message = "Category already exists"
                     throw "error"
                 } 
-                await new Category(data).save().catch((err: any)=> { response.backError = err; throw "error"})
+                await new Category(data).save().catch((err: any)=> { response.backError = err; throw "errkor"})
                 
                 break;
                 
             case "update":
-                
+                if (empty(data.category) || empty(data.subCategory)) { response.message ="Please Fill all fields"; throw "error" }
                 await Category.findOneAndUpdate({_id:_id}, {$set: data }).catch((err: any)=> { response.backError = err; throw "error"})
                 break;
     
             case "list":
                 let list = await Category.find().catch((err: any)=> { response.backError = err; throw "error"})
+
                 response.data = list;
                 break;
     
