@@ -9,17 +9,15 @@ const products: Application = express()
 
 //MODELS
 import Category from "../models/Category"
+import Product from "../models/Product"
 
+//CURD Category and  Subcategory
 products.post("/category/:operation", async(req, res )=>{
 
     let data = {
         category : req.body.category,
         subCategory : req.body.subCategory
     }
-
-    
-
-
 
     let checkExist = await Category.findOne({category : req.body.category}) || false
 
@@ -33,9 +31,7 @@ products.post("/category/:operation", async(req, res )=>{
 
     try {
         
-
         switch (req.params.operation) {
-
 
             case "create":
                 if (empty(data.category) || empty(data.subCategory)) { response.message ="Please Fill all fields"; throw "error" }
@@ -83,17 +79,28 @@ products.post("/category/:operation", async(req, res )=>{
     res.json(response)
     
 })
-//CURD Category
-
-//CURD Subcategory
 
 // Create
 
+products.post("/create", (req, res)=>{
+    
+})
+
 // Update
+products.post("/create", (req, res)=>{
+    
+})
 
 // Read List + Read-list/single product
+products.post("/create", (req, res)=>{
+    
+})
 
 // Delete
+products.post("/create", (req, res)=>{
+    
+})
+
 
 // Search
 
