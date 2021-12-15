@@ -152,7 +152,7 @@ products.post("/update", async (req : Request, res: Response)=>{
             response.message = "Product Saved successfully"
             response.status = true
             return res.json(response)
-        } catch (error) {
+        } catch (error:any) {
             response.message = 'Somthing Went Wrong, failed to update';
             return res.json(response)
         }
@@ -162,20 +162,35 @@ products.post("/update", async (req : Request, res: Response)=>{
 })
 
 // List products
-products.post("/list", (req, res)=>{
+products.post("/list", async (req, res)=>{
 
     let skip = req.body.skip
     let limit = req.body.limit
     let category = req.body.category
     let subCategory = req.body.subCategory
 
-    let list_query = {
-        category : "",
-        subCategory : ""
+    let response : response = {
+        status : false,
+        message : "Somthing Went Wrong"
     }
-    req.body.category != "" ? list_query.category = category: "";
-    req.body.subCategory != "" ? list_query.subCategory = subCategory: "";
 
+    let list_query = {
+        category : {$regex: ".*" + category + ".*"},
+        subCategory :  {$regex: ".*" + subCategory + ".*"}
+    }
+    
+    //send list query
+
+    try {
+        
+        let result = await Product.find(list_query).catch(err => {throw new Error})
+    } catch (error) {
+        response.message = 'Somthing Went Wrong, failed to fetch';
+        return res.json(response)
+    }
+
+    //return data
+    res.json(response)
     
     
 })
