@@ -5,8 +5,9 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "start": "node_modules/nodemon/bin/nodemon.js build/index.js",
-    "dev": "node_modules/nodemon/bin/nodemon.js src/index.ts",
+    "start": "./node_modules/nodemon/bin/nodemon.js build/index.js",
+    "dev": "./node_modules/nodemon/bin/nodemon.js src/index.ts",
+    "windev": "nodemon src/index.ts",
     "build": "tsc -p"
   },
   "repository": {

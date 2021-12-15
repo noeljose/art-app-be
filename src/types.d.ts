@@ -4,3 +4,11 @@ export type response =  {
     data?: object | array,
     backError? : any
 }
+
+export type product = {
+    title : string,
+    image : string,   
+    category : string,
+    subCategory :  string
+        
+}

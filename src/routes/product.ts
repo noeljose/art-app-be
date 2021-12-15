@@ -1,8 +1,9 @@
-import express, {Application} from "express"
-import {response} from "../types";
+import express, {Request, Response, Application} from "express"
+import {response, product} from "../types";
 import {empty} from "../lib/common"
 import {SchemaTypes} from "mongoose"
 const products: Application = express()
+
 
 //MIDDLEWARES
 
@@ -10,6 +11,8 @@ const products: Application = express()
 //MODELS
 import Category from "../models/Category"
 import Product from "../models/Product"
+
+let pdt =  typeof Product
 
 //CURD Category and  Subcategory
 products.post("/category/:operation", async(req, res )=>{
@@ -82,26 +85,115 @@ products.post("/category/:operation", async(req, res )=>{
 
 // Create
 
-products.post("/create", (req, res)=>{
+products.post("/create", async (req:Request, res:Response)=>{
+    let data:product  = {
+        title : req.body.title,
+        image : req.body.image,
+        category : req.body.category,
+        subCategory: req.body.subCategory
+    }
+    let response : response = {
+        status : false,
+        message : "Somthing Went Wrong"
+    }
+
+    if (data.title == '' || data.image == "" || data.category == "" || data.subCategory == "") {        
+        response.message = 'Please fill all the fields';
+        return res.json(response)
+
+    }
     
+    //Check Product Exist
+    let check_product = await Product.findOne({ title: data.title, image: data.image }) || false
+
+    if (check_product !== false) {
+        try {
+        
+            await Product.create(data).catch(error => {throw new Error;})
+            response.message = "Product Saved successfully"
+            response.status = true
+            return res.json(response)
+        } catch (error) {
+            response.message = 'Somthing Went Wrong, failed to add';
+            return res.json(response)
+        }
+    }
+    res.json(response)
+
 })
 
 // Update
-products.post("/create", (req, res)=>{
+products.post("/update", async (req : Request, res: Response)=>{
+    let product_id = req.body._id
+    let data:product  = {
+        title : req.body.title,
+        image : req.body.image,
+        category : req.body.category,
+        subCategory: req.body.subCategory
+    }
+    let response : response = {
+        status : false,
+        message : "Somthing Went Wrong, failed to update"
+    }
+
+    if (data.title == '' || data.image == "" || data.category == "" || data.subCategory == "") {        
+        response.message = 'Please fill all the fields';
+        return res.json(response)
+
+    }
     
+    //Check Product Exist
+    let check_product = await Product.findOne({ title: data.title, image: data.image }) || false
+
+    if (check_product !== false) {
+        try {
+        
+            await Product.findById(product_id).update(data).catch(error => {throw new Error;})
+            response.message = "Product Saved successfully"
+            response.status = true
+            return res.json(response)
+        } catch (error) {
+            response.message = 'Somthing Went Wrong, failed to update';
+            return res.json(response)
+        }
+    }
+
+    res.json(response)
 })
 
-// Read List + Read-list/single product
-products.post("/create", (req, res)=>{
+// List products
+products.post("/list", (req, res)=>{
+
+    let skip = req.body.skip
+    let limit = req.body.limit
+    let category = req.body.category
+    let subCategory = req.body.subCategory
+
+    let list_query = {
+        category : "",
+        subCategory : ""
+    }
+    req.body.category != "" ? list_query.category = category: "";
+    req.body.subCategory != "" ? list_query.subCategory = subCategory: "";
+
+    
+    
+})
+// Read single product
+products.post("/list/:productid", (req, res)=>{
+    
     
 })
 
 // Delete
-products.post("/create", (req, res)=>{
+products.post("/delete", (req, res)=>{
     
 })
 
 
 // Search
+products.post("/search/:query", (req, res)=>{
+    
+})
 
 export default products
