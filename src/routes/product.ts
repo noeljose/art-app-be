@@ -183,7 +183,13 @@ products.post("/list", async (req, res)=>{
 
     try {
         
-        let result = await Product.find(list_query).catch(err => {throw new Error})
+        let result = await Product.find(list_query)
+        .then(data => {
+            response.data = data
+            response.status = true
+            response.message = "Data Fetched successfully"
+        })
+        .catch(err => {throw new Error})
     } catch (error) {
         response.message = 'Somthing Went Wrong, failed to fetch';
         return res.json(response)
@@ -195,20 +201,82 @@ products.post("/list", async (req, res)=>{
     
 })
 // Read single product
-products.post("/list/:productid", (req, res)=>{
+products.post("/list/:productid", async (req, res)=>{
+
+    let product_id = req.params.productid
     
+    let response : response = {
+        status : false,
+        message : "Somthing Went Wrong"
+    }
+
+    try{
+        let result = await Product.findById(product_id).then(data => {
+            response.data = data
+            response.status = true
+            response.message = "Product fetched successfully"
+
+
+        })
+    }catch (error){
+            response.message = "Product could not be fetched"
+    }
     
+    res.json(response)
 })
 
 // Delete
-products.post("/delete", (req, res)=>{
-    
+products.post("/delete/:id", async (req: Request, res: Response)=>{
+    let product_id = req.params.id
+
+    let response : response = {
+        status : false,
+        message : "Somthing Went Wrong"
+    }
+
+    await Product.findByIdAndDelete(product_id)
+    .then(result =>{
+        response.status = true
+        response.message = "Product deleted successfully"
+    })
+    .catch(error => {
+        response.message = "Product couldn't be deleted"
+    })
+
+    res.json(response)
 })
 
 
 // Search
-products.post("/search/:query", (req, res)=>{
-    
+products.post("/search/:query", async (req, res)=>{
+
+   let query = req.params.query
+   let search = {
+       category : "",
+       subCategory : "",
+       name : '.*' + query + '*.'
+   }
+
+   let response : response = {
+    status : false,
+    message : "Somthing Went Wrong"
+}
+
+   req.body.category != ""? search.category = req.body.category : ""
+   req.body.subCategory != ""? search.subCategory = req.body.subCategory : ""
+   
+   try {
+       await Product.find(search)
+       .then(data => {
+           response.data = data
+           response.status = true
+           response.message = "Data Fetched sucessfully"
+       })
+   } catch (error) {
+       response.message = "SOmthing went wrong"
+   }
+
+   res.json(response)
 })
 
 export default products
