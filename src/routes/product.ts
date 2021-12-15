@@ -2,11 +2,40 @@ import express, {Request, Response, Application} from "express"
 import {response, product} from "../types";
 import {empty} from "../lib/common"
 import {SchemaTypes} from "mongoose"
+import multer, {} from "multer"
+import { v4 as uuid } from "uuid"
+import fs from "fs"
+
 const products: Application = express()
 
 
 //MIDDLEWARES
 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, '../images/')
+    },
+    filename: (req, file, cb) => {
+      const {
+        originalname
+      } = file
+  
+      let finalName = () => {
+        // let ext = originalname.split(".")
+        return `${uuid()}.jpg`
+      }
+  
+      let file_name = finalName()
+      req.body.customFileUploadName = file_name
+  
+      cb(null, file_name)
+    },
+  })
+
+
+
+
+  const upload = multer({ storage: storage })
 
 //MODELS
 import Category from "../models/Category"
@@ -83,8 +112,70 @@ products.post("/category/:operation", async(req, res )=>{
     
 })
 
-// Create
 
+products.post("/uploadimage", upload.single("productimage"), (req, res) => {
+  let value = req.body.customFileUploadName
+  let response : response = {
+    status : false,
+    message : "Somthing Went Wrong"
+}
+  try {
+    if (value) {
+      
+        response.status = true
+          response.message = "File Uploaded Successfully"
+          response.data = value
+    
+    } else {
+        response.message = "File Uploaded Failed"
+    }
+  } catch (error) {
+    response.status = false,
+        response.message = "Something went wrong while uploading the file",
+        response.backError = error
+  }
+
+  res.json(response)
+})
+
+//*--------------------UPDATE DP--------------------//
+products.post("/updateimage", upload.single("productimage"), (req, res) => {
+    let value = req.body.customFileUploadName
+    let oldImage = req.body.oldImage
+
+    let response : response = {
+        status : false,
+        message : "Somthing Went Wrong"
+    }
+  
+    try {
+  
+      fs.unlink(`'../images/'${oldImage}`, (err) => {
+  
+        if (value) {
+          //* S-Response
+          response.status = true
+          response.message = "File Uploaded Successfully"
+          response.data = value
+        
+        } else {
+          //* E-Response
+            response.message = "File Uploaded Failed",
+            response.backError = err
+        }
+      });
+  
+    } catch (error) {
+        response.status = false,
+        response.message = "Something went wrong while uploading the file",
+        response.backError = error
+    }
+
+    res.json(response)
+
+  })
+
+// Create
 products.post("/create", async (req:Request, res:Response)=>{
     let data:product  = {
         title : req.body.title,
@@ -106,7 +197,7 @@ products.post("/create", async (req:Request, res:Response)=>{
     //Check Product Exist
     let check_product = await Product.findOne({ title: data.title, image: data.image }) || false
 
-    if (check_product !== false) {
+    if (check_product == false) {
         try {
         
             await Product.create(data).catch(error => {throw new Error;})
@@ -117,6 +208,8 @@ products.post("/create", async (req:Request, res:Response)=>{
             response.message = 'Somthing Went Wrong, failed to add';
             return res.json(response)
         }
+    }else {
+        response.message = "Product With similar name already added"
     }
     res.json(response)
 
