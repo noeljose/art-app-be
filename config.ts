@@ -16,5 +16,5 @@ let config = {
     email : "noeljose1998af@gmail.com"
   }
 }
-console.log(__dirname);
+
 export default config

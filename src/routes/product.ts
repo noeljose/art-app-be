@@ -13,7 +13,7 @@ const products: Application = express()
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, '../images/')
+      cb(null, './images/')
     },
     filename: (req, file, cb) => {
       const {
@@ -42,6 +42,9 @@ import Category from "../models/Category"
 import Product from "../models/Product"
 
 let pdt =  typeof Product
+
+//IMAGES
+products.use("/images", express.static("images"))
 
 //CURD Category and  Subcategory
 products.post("/category/:operation", async(req, res )=>{
@@ -150,7 +153,7 @@ products.post("/updateimage", upload.single("productimage"), (req, res) => {
   
     try {
   
-      fs.unlink(`'../images/'${oldImage}`, (err) => {
+      fs.unlink(`'./images/'${oldImage}`, (err) => {
   
         if (value) {
           //* S-Response
@@ -226,7 +229,7 @@ products.post("/update", async (req : Request, res: Response)=>{
     }
     let response : response = {
         status : false,
-        message : "Somthing Went Wrong, failed to update"
+        message : "Somthing Went Wrong, failed to update 229"
     }
 
     if (data.title == '' || data.image == "" || data.category == "" || data.subCategory == "") {        
@@ -235,21 +238,17 @@ products.post("/update", async (req : Request, res: Response)=>{
 
     }
     
-    //Check Product Exist
-    let check_product = await Product.findOne({ title: data.title, image: data.image }) || false
-
-    if (check_product !== false) {
         try {
         
-            await Product.findById(product_id).update(data).catch(error => {throw new Error;})
+            await Product.findById(product_id).updateOne(data).catch(error => {throw new Error;})
             response.message = "Product Saved successfully"
             response.status = true
             return res.json(response)
         } catch (error:any) {
-            response.message = 'Somthing Went Wrong, failed to update';
+            response.message = 'Somthing Went Wrong, failed to update 249';
             return res.json(response)
         }
-    }
+    
 
     res.json(response)
 })
