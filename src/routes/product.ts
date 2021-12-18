@@ -9,7 +9,10 @@ import fs from "fs"
 const products: Application = express()
 
 
+
 //MIDDLEWARES
+
+products.use(express.json())
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -340,13 +343,12 @@ products.post("/delete/:id", async (req: Request, res: Response)=>{
 
 
 // Search
-products.post("/search/:query", async (req, res)=>{
+products.post("/search", async (req, res)=>{
 
-   let query = req.params.query
+  
    let search = {
-       category : "",
-       subCategory : "",
-       name : '.*' + query + '*.'
+     
+     title: { $regex: req.body.title , $options : "i" } 
    }
 
    let response : response = {
@@ -354,18 +356,18 @@ products.post("/search/:query", async (req, res)=>{
     message : "Somthing Went Wrong"
 }
 
-   req.body.category != ""? search.category = req.body.category : ""
-   req.body.subCategory != ""? search.subCategory = req.body.subCategory : ""
    
    try {
-       await Product.find(search)
-       .then(data => {
+       let data = await Product.find( search )
+console.log(search);
+
+      
            response.data = data
            response.status = true
            response.message = "Data Fetched sucessfully"
-       })
+       
    } catch (error) {
-       response.message = "SOmthing went wrong"
+       response.message = "Somthing went wrong"
    }
 
    res.json(response)
