@@ -118,7 +118,6 @@ products.post("/category/:operation", async(req, res )=>{
     
 })
 
-
 products.post("/uploadimage", upload.single("productimage"), (req, res) => {
   let value = req.body.customFileUploadName
   let response : response = {
@@ -340,7 +339,6 @@ products.post("/delete/:id", async (req: Request, res: Response)=>{
 
     res.json(response)
 })
-
 
 // Search
 products.post("/search", async (req, res)=>{
