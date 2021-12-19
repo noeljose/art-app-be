@@ -12,3 +12,11 @@ export type product = {
     subCategory :  string
         
 }
+
+export type marketeer = {
+    name? : string,
+    phone? : string,
+    email? : string,
+    password? : string,
+    active? : boolean
+}
