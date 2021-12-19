@@ -79,7 +79,8 @@ admin.post("/marketeer/update", async (req:Request, res:Response)=>{
   let data:marketeer = {
     name : req.body.name,
     phone : req.body.phone,
-    email : req.body.email
+    email : req.body.email,
+    active : req.body.active
   }
 
   try {
