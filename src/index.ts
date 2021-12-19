@@ -2,6 +2,7 @@ import "dotenv/config"
 import express ,{Request, Response, NextFunction, Application} from "express"
 import mongo from "mongoose"
 import products from "./routes/product"
+import admin from "./routes/admin"
 import cors from "cors"
 
 const app: Application = express()
@@ -13,6 +14,7 @@ app.use(express.json())
 
 //ROUTES
 app.use("/products", products)
+app.use("/admin", admin)
 
 
 
