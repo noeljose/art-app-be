@@ -132,7 +132,7 @@ admin.post("/marketeer/read/:id", async (req:Request, res:Response)=>{
     message : "Somthing Went Wrong"
   }
 
-  let _id = req.body._id
+  let _id = req.params_id
 
   try {
     await Marketeer.findById(_id)
