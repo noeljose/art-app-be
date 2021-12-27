@@ -1,3 +1,7 @@
+
+//My custom types
+
+
 export type response =  {
     status: boolean,
     message: string,
@@ -19,4 +23,14 @@ export type marketeer = {
     email? : string,
     password? : string,
     active? : boolean
+}
+
+export type distributer = {  
+    name?: string,
+    phone?: string,
+    email?: string,  
+    password?: string,
+    basePrice?: number,
+    deliveryPrice?: number,
+    active?: boolean
 }

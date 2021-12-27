@@ -1,5 +1,5 @@
 import express, {Request, Response, Application} from "express"
-import {response, product, marketeer} from "../types";
+import {response, product, marketeer, distributer} from "../types";
 import {empty} from "../lib/common"
 import multer, {} from "multer"
 import { v4 as uuid } from "uuid"
@@ -32,13 +32,11 @@ const storage = multer.diskStorage({
   })
 
 
-
-
-  const upload = multer({ storage: storage })
+const upload = multer({ storage: storage })
 
 //MODELS
 import Marketeer from "../models/Marketeer";
-
+import Distributer from "../models/Distributer"
 
 
 //CREATE SALESMAN
@@ -170,6 +168,148 @@ admin.post("/marketeer/delete", async (req:Request, res:Response)=>{
   } catch (error) {
     response.status = false
     response.message = "Sales Person Deleted failed!"
+  }
+
+  res.json(response)
+})
+
+
+
+
+//CREATE DISTRIBUTER
+admin.post("/distributer/create", async (req:Request, res:Response)=>{
+  let response:response = {
+    status : false,
+    message : "Somthing Went Wrong!"
+  }
+
+  let data:distributer = {
+    name : req.body.name,
+    phone : req.body.phone,
+    email : req.body.email,
+    password : req.body.password,
+    basePrice : req.body.basePrice,
+    deliveryPrice : req.body.deliveryPrice
+    
+  }
+
+  try {
+    await Distributer.create(data).catch((error:any) => {throw new Error})
+    response.status = true
+    response.message = "Distributer creation successful"
+  } catch (error:any) {
+    response.status = false
+    response.message = "Distributer creation failed!"
+  }
+
+  res.json(response)
+
+})
+
+//UPDATE DISTRIBUTER
+admin.post("/distributer/update", async (req:Request, res:Response)=>{
+  let response:response = {
+    status : false,
+    message : "Somthing Went Wrong"
+  }
+
+  let _id = req.body._id;
+  let data:distributer = {
+    name : req.body.name,
+    phone : req.body.phone,
+    email : req.body.email,
+    active : req.body.active,
+    basePrice : req.body.basePrice,
+    deliveryPrice : req.body.deliveryPrice
+  }
+
+  try {
+    await Distributer.findByIdAndUpdate(_id, data).catch((error:any) => {throw new Error})
+    response.status = true
+    response.message = "Distributer data updation successful"
+  } catch (error:any) {
+    response.status = false
+    response.message = "Distributer data updation failed!"
+  }
+
+  res.json(response)
+
+})
+
+//READ DISTRIBUTER
+admin.post("/distributer/read", async (req:Request, res:Response)=>{
+  let response:response = {
+    status : false,
+    message : "Somthing Went Wrong"
+  }
+
+  let limit = req.body.limit || 1;
+  let skip = req.body.skip || 0;
+
+  try {
+
+    let partData = await Distributer.find().limit(limit).skip(skip).catch((error:any) => {throw new Error})
+    let count = await Distributer.find().countDocuments()
+
+    response.status = true
+    response.message = "Data Fetched Successfully"
+    response.data = {
+      distributer : partData,
+      count : count
+    }
+
+  } catch (error) {
+    response.status = false
+    response.message = "Data Fetch failed!"
+  }
+
+  res.json(response)
+})
+
+//READ DISTRIBUTER SINGLE
+admin.post("/distributer/read/:id", async (req:Request, res:Response)=>{
+  let response:response = {
+    status : false,
+    message : "Somthing Went Wrong"
+  }
+
+  let _id = req.params.id
+
+  try {
+    await Distributer.findById(_id)
+    .then((data)=>{
+      response.status = true
+      response.message = "Distributer Fetched Successfully"
+      response.data = data
+    })
+    .catch((error:any) => {throw new Error})
+  } catch (error) {
+    response.status = false
+    response.message = "Distributer Fetch failed!"
+  }
+
+  res.json(response)
+})
+
+//DELETE DISTRIBUTER
+admin.post("/distributer/delete", async (req:Request, res:Response)=>{
+  let response:response = {
+    status : false,
+    message : "Somthing Went Wrong"
+  }
+
+  let _id = req.body._id
+
+  try {
+    await Distributer.findByIdAndDelete(_id)
+    .then((data)=>{
+      response.status = true
+      response.message = "Distributer Deleted Successfully"
+    })
+    .catch((error:any) => {throw new Error})
+  } catch (error) {
+    response.status = false
+    response.message = "Distributer Deleted failed!"
   }
 
   res.json(response)

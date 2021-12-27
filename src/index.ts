@@ -3,6 +3,7 @@ import express ,{Request, Response, NextFunction, Application} from "express"
 import mongo from "mongoose"
 import products from "./routes/product"
 import admin from "./routes/admin"
+import distributer from "./routes/distributer"
 import cors from "cors"
 
 const app: Application = express()
@@ -15,6 +16,7 @@ app.use(express.json())
 //ROUTES
 app.use("/products", products)
 app.use("/admin", admin)
+app.use("/distributer", distributer)
 
 
 
@@ -28,4 +30,4 @@ app.get("/", (req, res)=> {
     res.send("WELCOME TO THE PROJECT API")
 })
 
-app.listen(process.env.PORT)
+app.listen(process.env.PORT, ()=>{console.log('running at http://127.0.0.1:'+process.env.PORT)})
