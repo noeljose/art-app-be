@@ -30,6 +30,7 @@ export type distributer = {
     phone?: string,
     email?: string,  
     password?: string,
+    address? : string,
     basePrice?: number,
     deliveryPrice?: number,
     active?: boolean

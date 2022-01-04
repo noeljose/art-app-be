@@ -22,6 +22,11 @@ const DistributerSchema = new mongo.Schema({
         required: true
     },
 
+    address : {
+        type : String,
+        required: true
+    },
+
     basePrice: {
         type : Number,
         required: true
