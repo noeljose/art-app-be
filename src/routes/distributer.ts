@@ -22,7 +22,12 @@ distributerRoute.post("/login", async (req:Request, res:Response)=> {
 
   !loginCheck ? response.message = 'This Account Does Not Exist.' : null
 
+  console.log(loginCheck[0]);
+  
+  
+
     if (loginCheck[0].email == req.body.email && loginCheck[0].password == req.body.password) {
+      console.log(req.body.email);
       
       let data:distributer = {
         name: loginCheck[0].name,
