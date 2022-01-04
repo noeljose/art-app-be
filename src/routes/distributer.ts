@@ -2,16 +2,16 @@ import express, {Request, Response, Application} from "express"
 import {response, product, distributer} from "../types";
 import jwt from "jsonwebtoken"
 
-const distributer: Application = express()
+const distributerRoute: Application = express()
 
 //MIDDLEWARES
-distributer.use(express.json())
+distributerRoute.use(express.json())
 
 //MODELS
 import Distributer from "../models/Distributer"
 
 //Login
-distributer.post("/login", async (req:Request, res:Response)=> {
+distributerRoute.post("/login", async (req:Request, res:Response)=> {
 
   let response:response = {
     status : false,
@@ -49,7 +49,7 @@ distributer.post("/login", async (req:Request, res:Response)=> {
 })
 
 
-distributer.post("/update" , async (req:Request, res:Response)=>{
+distributerRoute.post("/update" , async (req:Request, res:Response)=>{
   let response:response = {
     status : false,
     message : "Unable to update, please try later!"
@@ -86,5 +86,5 @@ distributer.post("/update" , async (req:Request, res:Response)=>{
 })
 
 
-export default distributer
+export default distributerRoute
 
