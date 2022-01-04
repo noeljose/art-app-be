@@ -35,3 +35,23 @@ export type distributer = {
     deliveryPrice?: number,
     active?: boolean
 }
+
+export type orderType = {
+    product_id? : string,
+    order_details? : {
+        width? : number,
+        height? : number,
+        arcTop? : boolean,
+        arcBottom? : boolean,
+        varnish? : boolean,
+        whiteCoat? : boolean,
+        sandwich? : number,
+        message? : string
+    },
+    order_placed_by? : string,
+    order_processed_by? :string,
+    shipping_address? :  string,
+    status? : number,
+    category?: string,
+    subCategory? :  string
+}

@@ -22,21 +22,17 @@ distributerRoute.post("/login", async (req:Request, res:Response)=> {
 
   !loginCheck ? response.message = 'This Account Does Not Exist.' : null
 
-  console.log(loginCheck[0]);
-  
-  
-
     if (loginCheck[0].email == req.body.email && loginCheck[0].password == req.body.password) {
-      console.log(req.body.email);
       
       let data:distributer = {
+    
         name: loginCheck[0].name,
         phone: loginCheck[0].phone,
         email: loginCheck[0].email,  
         basePrice: loginCheck[0].basePrice
       }
       
-      let token = jwt.sign({...data, authority:'A3'}, process.env.JWT_PASS!, {
+      let token = jwt.sign({...data, _id : loginCheck[0]._id, authority:'A3'}, process.env.JWT_PASS!, {
         expiresIn: '8h'
       })
   
@@ -85,6 +81,33 @@ distributerRoute.post("/update" , async (req:Request, res:Response)=>{
   }
 
 
+
+  res.json(response)
+
+})
+
+
+
+distributerRoute.post("/read", async (req:Request, res:Response)=> {
+
+  let response:response = {
+    status : false,
+    message : "Unable to fetch your account, please try later!"
+  }
+  let _id = req.body._id
+
+  try {
+    await Distributer.findById(_id)
+    .then((data)=>{
+      response.status = true
+      response.message = "Bingo!"
+      response.data = data
+    })
+    .catch(()=>{throw new Error})
+  } catch (error) {
+    response.status = false
+    response.message = "Something went worng, please try again"
+  }
 
   res.json(response)
 
