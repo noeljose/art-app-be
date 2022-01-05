@@ -4,6 +4,7 @@ import mongo from "mongoose"
 import products from "./routes/product"
 import admin from "./routes/admin"
 import distributer from "./routes/distributer"
+import order from "./routes/orders"
 import cors from "cors"
 
 const app: Application = express()
@@ -17,6 +18,7 @@ app.use(express.json())
 app.use("/products", products)
 app.use("/admin", admin)
 app.use("/distributer", distributer)
+app.use("/order", order)
 
 
 

@@ -40,7 +40,7 @@ order.post("/place", async (req:Request, res: Response) =>{
 
     try {
         
-        Order.create(data)
+       let ord =  await Order.create(data)
         .then(()=>{
             response.status = true
             response.message = "Order Placed Successfully"
