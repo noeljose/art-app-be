@@ -1,11 +1,15 @@
 import "dotenv/config"
 import express ,{Request, Response, NextFunction, Application} from "express"
 import mongo from "mongoose"
+import cors from "cors"
+
+
+//Routes
 import products from "./routes/product"
 import admin from "./routes/admin"
 import distributer from "./routes/distributer"
 import order from "./routes/orders"
-import cors from "cors"
+import marketeer  from "./routes/marketeer"
 
 const app: Application = express()
 
@@ -19,6 +23,7 @@ app.use("/products", products)
 app.use("/admin", admin)
 app.use("/distributer", distributer)
 app.use("/order", order)
+app.use("/marketeer", marketeer)
 
 
 
