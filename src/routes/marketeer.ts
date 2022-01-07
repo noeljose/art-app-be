@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken"
 const marketeerRoute: Application = express()
 
 //MIDDLEWARES
-marketeerRoute.use(express.json())
+
 
 //MODELS
 import Marketeer from "../models/Marketeer"
@@ -29,7 +29,7 @@ marketeerRoute.post("/login", async (req:Request, res:Response)=> {
     .find({email: req.body.email, password: req.body.password})
     .catch(()=>{throw new Error})
   
-    !loginCheck[0].email ? response.message = 'This Account Does Not Exist.' : null;
+    !loginCheck[0].email ? response.message = 'This account does not exist.' : null;
 
     console.log(loginCheck);
     
@@ -76,13 +76,13 @@ marketeerRoute.post("/order_status", async (req:Request, res:Response)=> {
     status : false,
     message : "Unable to update the order status, please try later"
   }
-
+  
   let order_id = req.body._id;
   let status = req.body.status
 
   try {
     if (typeof status != 'number') {
-      throw `The Status must be a number, but instead recieved status of type ${typeof status}`
+      throw `The status must be a number, but instead recieved status of type ${typeof status}`
     }
     await Order.findByIdAndUpdate(order_id, {$set : {
       status : status

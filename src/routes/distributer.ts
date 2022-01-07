@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken"
 const distributerRoute: Application = express()
 
 //MIDDLEWARES
-distributerRoute.use(express.json())
+
 
 //MODELS
 import Distributer from "../models/Distributer"
@@ -28,7 +28,7 @@ distributerRoute.post("/login", async (req:Request, res:Response)=> {
     .find({email: req.body.email, password: req.body.password})
     .catch(()=>{throw new Error})
   
-    !loginCheck[0].email ? response.message = 'This Account Does Not Exist.' : null;
+    !loginCheck[0].email ? response.message = 'This account, does not exist.' : null;
 
     console.log(loginCheck);
     
@@ -51,7 +51,7 @@ distributerRoute.post("/login", async (req:Request, res:Response)=> {
           response.message = "The account is not active at the moment, please contact your adminstrator"
         }else {
           response.status = true
-          response.message = 'Login Successful'
+          response.message = 'Login successful'
           response.data = {
             name: loginCheck[0].name,
             phone: loginCheck[0].phone,
@@ -93,13 +93,13 @@ distributerRoute.post("/update" , async (req:Request, res:Response)=>{
     Distributer.findByIdAndUpdate(_id, data)
     .then(function(){ 
       response.status = true;
-      response.message = "Data Updated Successfully!";
+      response.message = "Data Updated successfully!";
     })
     .catch(function(){
       throw new Error;
     })
   } catch (error) {
-    response.message = "Error Occured while updating, try again"
+    response.message = "Error occured while updating, try again"
   }
 
 

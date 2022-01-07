@@ -12,7 +12,7 @@ const products: Application = express()
 
 //MIDDLEWARES
 
-products.use(express.json())
+
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -61,7 +61,7 @@ products.post("/category/:operation", async(req, res )=>{
 
     let response: response = {
         status : false,
-        message : "Somthing Went wrong"
+        message : "Somthing went wrong"
     }
 
     let _id = req.body._id || ""
@@ -72,7 +72,7 @@ products.post("/category/:operation", async(req, res )=>{
         switch (req.params.operation) {
 
             case "create":
-                if (empty(data.category) || empty(data.subCategory)) { response.message ="Please Fill all fields"; throw "error" }
+                if (empty(data.category) || empty(data.subCategory)) { response.message ="Please fill all fields"; throw "error" }
            
                 if (checkExist != false) {
                     response.message = "Category already exists"
@@ -83,7 +83,7 @@ products.post("/category/:operation", async(req, res )=>{
                 break;
                 
             case "update":
-                if (empty(data.category) || empty(data.subCategory)) { response.message ="Please Fill all fields"; throw "error" }
+                if (empty(data.category) || empty(data.subCategory)) { response.message ="Please fill all fields"; throw "error" }
                 await Category.findOneAndUpdate({_id:_id}, {$set: data }).catch((err: any)=> { response.backError = err; throw "error"})
                 break;
     
@@ -112,7 +112,7 @@ products.post("/category/:operation", async(req, res )=>{
     }
       
     response.status = true
-    response.message = "Operation Successful"
+    response.message = "Operation successful"
     
     res.json(response)
     
@@ -122,17 +122,17 @@ products.post("/uploadimage", upload.single("productimage"), (req, res) => {
   let value = req.body.customFileUploadName
   let response : response = {
     status : false,
-    message : "Somthing Went Wrong"
+    message : "Somthing went wrong"
 }
   try {
     if (value) {
       
         response.status = true
-          response.message = "File Uploaded Successfully"
+          response.message = "File uploaded Successfully"
           response.data = value
     
     } else {
-        response.message = "File Uploaded Failed"
+        response.message = "File uploaded Failed"
     }
   } catch (error) {
     response.status = false,
@@ -150,7 +150,7 @@ products.post("/updateimage", upload.single("productimage"), (req, res) => {
 
     let response : response = {
         status : false,
-        message : "Somthing Went Wrong"
+        message : "Somthing went wrong"
     }
   
     try {
@@ -160,12 +160,12 @@ products.post("/updateimage", upload.single("productimage"), (req, res) => {
         if (value) {
           //* S-Response
           response.status = true
-          response.message = "File Uploaded Successfully"
+          response.message = "File uploaded successfully"
           response.data = value
         
         } else {
           //* E-Response
-            response.message = "File Uploaded Failed",
+            response.message = "File uploaded Failed",
             response.backError = err
         }
       });
@@ -190,7 +190,7 @@ products.post("/create", async (req:Request, res:Response)=>{
     }
     let response : response = {
         status : false,
-        message : "Somthing Went Wrong"
+        message : "Somthing went wrong"
     }
 
     if (data.title == '' || data.image == "" || data.category == "" || data.subCategory == "") {        
@@ -206,15 +206,15 @@ products.post("/create", async (req:Request, res:Response)=>{
         try {
         
             await Product.create(data).catch(error => {throw new Error;})
-            response.message = "Product Saved successfully"
+            response.message = "Product saved successfully"
             response.status = true
             return res.json(response)
         } catch (error) {
-            response.message = 'Somthing Went Wrong, failed to add';
+            response.message = 'Somthing went wrong, failed to add';
             return res.json(response)
         }
     }else {
-        response.message = "Product With similar name already added"
+        response.message = "Product with similar name already added"
     }
     res.json(response)
 
@@ -231,7 +231,7 @@ products.post("/update", async (req : Request, res: Response)=>{
     }
     let response : response = {
         status : false,
-        message : "Somthing Went Wrong, failed to update 229"
+        message : "Somthing went wrong, failed to update 234"
     }
 
     if (data.title == '' || data.image == "" || data.category == "" || data.subCategory == "") {        
@@ -243,11 +243,11 @@ products.post("/update", async (req : Request, res: Response)=>{
         try {
         
             await Product.findById(product_id).updateOne(data).catch(error => {throw new Error;})
-            response.message = "Product Saved successfully"
+            response.message = "Product saved successfully"
             response.status = true
             return res.json(response)
         } catch (error:any) {
-            response.message = 'Somthing Went Wrong, failed to update 249';
+            response.message = 'Somthing went wrong, failed to update 249';
             return res.json(response)
         }
     
@@ -265,7 +265,7 @@ products.post("/list", async (req, res)=>{
 
     let response : response = {
         status : false,
-        message : "Somthing Went Wrong"
+        message : "Somthing went wrong"
     }
 
     let list_query = {
@@ -285,7 +285,7 @@ products.post("/list", async (req, res)=>{
         })
         .catch(err => {throw new Error})
     } catch (error) {
-        response.message = 'Somthing Went Wrong, failed to fetch';
+        response.message = 'Somthing went wrong, failed to fetch';
         return res.json(response)
     }
 
@@ -301,7 +301,7 @@ products.post("/list/:productid", async (req, res)=>{
     
     let response : response = {
         status : false,
-        message : "Somthing Went Wrong"
+        message : "Somthing went wrong"
     }
 
     try{
@@ -325,7 +325,7 @@ products.post("/delete/:id", async (req: Request, res: Response)=>{
 
     let response : response = {
         status : false,
-        message : "Somthing Went Wrong"
+        message : "Somthing went wrong"
     }
 
     await Product.findByIdAndDelete(product_id)
@@ -351,7 +351,7 @@ products.post("/search", async (req, res)=>{
 
    let response : response = {
     status : false,
-    message : "Somthing Went Wrong"
+    message : "Somthing went wrong"
 }
 
    

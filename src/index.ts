@@ -2,6 +2,16 @@ import "dotenv/config"
 import express ,{Request, Response, NextFunction, Application} from "express"
 import mongo from "mongoose"
 import cors from "cors"
+import jwt from "jsonwebtoken"
+import {validate_token} from "./functions"
+
+
+const app: Application = express()
+
+//MIDDLEWARES
+app.use(express.json())
+app.use(validate_token)
+app.use(cors())
 
 
 //Routes
@@ -11,20 +21,18 @@ import distributer from "./routes/distributer"
 import order from "./routes/orders"
 import marketeer  from "./routes/marketeer"
 
-const app: Application = express()
 
-//MIDDLEWARES
-app.use(cors())
-app.use(express.json())
+
+
 
 
 //ROUTES
-app.use("/products", products)
+
 app.use("/admin", admin)
 app.use("/distributer", distributer)
-app.use("/order", order)
 app.use("/marketeer", marketeer)
-
+app.use("/order", order)
+app.use("/products", products)
 
 
 mongo.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.lgzgs.mongodb.net/artpoint?retryWrites=true&w=majority`)
@@ -35,6 +43,11 @@ mongo.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@clust
 
 app.get("/", (req, res)=> {
     res.send("WELCOME TO THE PROJECT API")
+})
+
+
+app.get("/token", async (req, res)=>{
+    res.send(jwt.sign("testtoken", process.env.JWT_PASS!))
 })
 
 app.listen(process.env.PORT, ()=>{console.log('running at http://127.0.0.1:'+process.env.PORT)})

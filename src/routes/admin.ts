@@ -8,7 +8,6 @@ const admin: Application = express()
 
 //MIDDLEWARES
 
-admin.use(express.json())
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -43,7 +42,7 @@ import Distributer from "../models/Distributer"
 admin.post("/marketeer/create", async (req:Request, res:Response)=>{
   let response:response = {
     status : false,
-    message : "Somthing Went Wrong!"
+    message : "Somthing went wrong!"
   }
 
   let data:marketeer = {
@@ -70,7 +69,7 @@ admin.post("/marketeer/create", async (req:Request, res:Response)=>{
 admin.post("/marketeer/update", async (req:Request, res:Response)=>{
   let response:response = {
     status : false,
-    message : "Somthing Went Wrong"
+    message : "Somthing went wrong"
   }
 
   let _id = req.body._id;
@@ -98,7 +97,7 @@ admin.post("/marketeer/update", async (req:Request, res:Response)=>{
 admin.post("/marketeer/read", async (req:Request, res:Response)=>{
   let response:response = {
     status : false,
-    message : "Somthing Went Wrong"
+    message : "Somthing went wrong"
   }
 
   let limit = req.body.limit || 1;
@@ -110,7 +109,7 @@ admin.post("/marketeer/read", async (req:Request, res:Response)=>{
     let count = await Marketeer.find().countDocuments()
 
     response.status = true
-    response.message = "Data Fetched Successfully"
+    response.message = "Data fetched successfully"
     response.data = {
       marketeers : partData,
       count : count
@@ -118,7 +117,7 @@ admin.post("/marketeer/read", async (req:Request, res:Response)=>{
 
   } catch (error) {
     response.status = false
-    response.message = "Data Fetch failed!"
+    response.message = "Data fetch failed!"
   }
 
   res.json(response)
@@ -128,7 +127,7 @@ admin.post("/marketeer/read", async (req:Request, res:Response)=>{
 admin.post("/marketeer/read/:id", async (req:Request, res:Response)=>{
   let response:response = {
     status : false,
-    message : "Somthing Went Wrong"
+    message : "Somthing went wrong"
   }
 
   let _id = req.params.id
@@ -137,13 +136,13 @@ admin.post("/marketeer/read/:id", async (req:Request, res:Response)=>{
     await Marketeer.findById(_id)
     .then((data)=>{
       response.status = true
-      response.message = "Sales Person Fetched Successfully"
+      response.message = "Sales person fetched successfully"
       response.data = data
     })
     .catch((error:any) => {throw new Error})
   } catch (error) {
     response.status = false
-    response.message = "Sales Person Fetch failed!"
+    response.message = "Sales person fetch failed!"
   }
 
   res.json(response)
@@ -153,7 +152,7 @@ admin.post("/marketeer/read/:id", async (req:Request, res:Response)=>{
 admin.post("/marketeer/delete", async (req:Request, res:Response)=>{
   let response:response = {
     status : false,
-    message : "Somthing Went Wrong"
+    message : "Somthing went wrong"
   }
 
   let _id = req.body._id
@@ -162,12 +161,12 @@ admin.post("/marketeer/delete", async (req:Request, res:Response)=>{
     await Marketeer.findByIdAndDelete(_id)
     .then((data)=>{
       response.status = true
-      response.message = "Sales Person Deleted Successfully"
+      response.message = "Sales person deleted successfully"
     })
     .catch((error:any) => {throw new Error})
   } catch (error) {
     response.status = false
-    response.message = "Sales Person Deleted failed!"
+    response.message = "Sales person deleted failed!"
   }
 
   res.json(response)
@@ -180,7 +179,7 @@ admin.post("/marketeer/delete", async (req:Request, res:Response)=>{
 admin.post("/distributer/create", async (req:Request, res:Response)=>{
   let response:response = {
     status : false,
-    message : "Somthing Went Wrong!"
+    message : "Somthing went wrong!"
   }
 
   let data:distributer = {
@@ -210,7 +209,7 @@ admin.post("/distributer/create", async (req:Request, res:Response)=>{
 admin.post("/distributer/update", async (req:Request, res:Response)=>{
   let response:response = {
     status : false,
-    message : "Somthing Went Wrong"
+    message : "Somthing went wrong"
   }
 
   let _id = req.body._id;
@@ -240,7 +239,7 @@ admin.post("/distributer/update", async (req:Request, res:Response)=>{
 admin.post("/distributer/read", async (req:Request, res:Response)=>{
   let response:response = {
     status : false,
-    message : "Somthing Went Wrong"
+    message : "Somthing went wrong"
   }
 
   let limit = req.body.limit || 1;
@@ -252,7 +251,7 @@ admin.post("/distributer/read", async (req:Request, res:Response)=>{
     let count = await Distributer.find().countDocuments()
 
     response.status = true
-    response.message = "Data Fetched Successfully"
+    response.message = "Data fetched successfully"
     response.data = {
       distributer : partData,
       count : count
@@ -260,7 +259,7 @@ admin.post("/distributer/read", async (req:Request, res:Response)=>{
 
   } catch (error) {
     response.status = false
-    response.message = "Data Fetch failed!"
+    response.message = "Data fetch failed!"
   }
 
   res.json(response)
@@ -270,7 +269,7 @@ admin.post("/distributer/read", async (req:Request, res:Response)=>{
 admin.post("/distributer/read/:id", async (req:Request, res:Response)=>{
   let response:response = {
     status : false,
-    message : "Somthing Went Wrong"
+    message : "Somthing went wrong"
   }
 
   let _id = req.params.id
@@ -279,13 +278,13 @@ admin.post("/distributer/read/:id", async (req:Request, res:Response)=>{
     await Distributer.findById(_id)
     .then((data)=>{
       response.status = true
-      response.message = "Distributer Fetched Successfully"
+      response.message = "Distributer fetched successfully"
       response.data = data
     })
     .catch((error:any) => {throw new Error})
   } catch (error) {
     response.status = false
-    response.message = "Distributer Fetch failed!"
+    response.message = "Distributer fetch failed!"
   }
 
   res.json(response)
@@ -295,7 +294,7 @@ admin.post("/distributer/read/:id", async (req:Request, res:Response)=>{
 admin.post("/distributer/delete", async (req:Request, res:Response)=>{
   let response:response = {
     status : false,
-    message : "Somthing Went Wrong"
+    message : "Somthing went wrong"
   }
 
   let _id = req.body._id
@@ -304,12 +303,12 @@ admin.post("/distributer/delete", async (req:Request, res:Response)=>{
     await Distributer.findByIdAndDelete(_id)
     .then((data)=>{
       response.status = true
-      response.message = "Distributer Deleted Successfully"
+      response.message = "Distributer deleted successfully"
     })
     .catch((error:any) => {throw new Error})
   } catch (error) {
     response.status = false
-    response.message = "Distributer Deleted failed!"
+    response.message = "Distributer deleted failed!"
   }
 
   res.json(response)
