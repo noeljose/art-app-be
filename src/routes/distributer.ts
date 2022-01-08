@@ -1,10 +1,10 @@
-import express, {Request, Response, Application} from "express"
+import express, {Request, Response, Application, NextFunction} from "express"
 import {response, product, distributer} from "../types";
 import jwt from "jsonwebtoken"
 
 const distributerRoute: Application = express()
 
-//MIDDLEWARES
+
 
 
 //MODELS
@@ -53,6 +53,7 @@ distributerRoute.post("/login", async (req:Request, res:Response)=> {
           response.status = true
           response.message = 'Login successful'
           response.data = {
+            _id: loginCheck[0]._id,
             name: loginCheck[0].name,
             phone: loginCheck[0].phone,
             email: loginCheck[0].email,  
@@ -72,7 +73,25 @@ distributerRoute.post("/login", async (req:Request, res:Response)=> {
 })
 
 
+
+//MIDDLEWARES
+distributerRoute.use((req:Request, res: Response, next: NextFunction )=>{
+  let response:response = {
+      status : false,
+      message : "Insufficent Permissions"
+    }
+
+  if (req.body.auth_payload.authority == "A1" || req.body.auth_payload.authority == "A2") { 
+      res.json(response)
+  }
+})
+
+
+
 distributerRoute.post("/update" , async (req:Request, res:Response)=>{
+
+  
+
   let response:response = {
     status : false,
     message : "Unable to update, please try later!"
@@ -89,6 +108,9 @@ distributerRoute.post("/update" , async (req:Request, res:Response)=>{
   }
 
   try {
+
+    if (req.body.auth_payload.authority != "A3") { throw new Error }
+    if (req.body.auth_payload._id != _id) { throw new Error }
     
     Distributer.findByIdAndUpdate(_id, data)
     .then(function(){ 
@@ -119,6 +141,9 @@ distributerRoute.post("/read", async (req:Request, res:Response)=> {
   let _id = req.body._id
 
   try {
+    if (req.body.auth_payload.authority != "A3") { throw new Error }
+    if (req.body.auth_payload._id != _id) { throw new Error }
+
     await Distributer.findById(_id)
     .then((data)=>{
       response.status = true

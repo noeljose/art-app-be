@@ -1,17 +1,25 @@
-import express, {Request, Response, Application} from "express"
+import express, {Request, Response, Application, NextFunction} from "express"
 import {response, product, distributer, orderType} from "../types";
 import jwt from "jsonwebtoken"
 
 const order: Application = express()
 
 //MIDDLEWARES
-//!!!!!!!!!!!
+order.use((req:Request, res: Response, next: NextFunction )=>{
+    let response:response = {
+        status : false,
+        message : "Insufficent Permissions"
+      }
+
+    if (req.body.auth_payload.authority) { 
+        res.json(response)
+    }
+})
 
 //MODELS
 import Order from "../models/Order"
 
 //Routes
-
 order.post("/place", async (req:Request, res: Response) =>{
 
     let response:response = {
@@ -137,7 +145,6 @@ order.post("/list", async (req:Request, res: Response) =>{
 
 })
 
-
 order.post("/single_order_view", async (req:Request, res: Response)=>{
     let order_id = req.body.order_id
 
@@ -158,7 +165,6 @@ order.post("/single_order_view", async (req:Request, res: Response)=>{
 
     res.json(response)
 })
-
 
 export default order
 

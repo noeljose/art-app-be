@@ -1,10 +1,9 @@
-import express, {Request, Response, Application} from "express"
+import express, {Request, Response, Application, NextFunction} from "express"
 import {response, product, marketeer} from "../types";
 import jwt from "jsonwebtoken"
 
 const marketeerRoute: Application = express()
 
-//MIDDLEWARES
 
 
 //MODELS
@@ -24,6 +23,7 @@ marketeerRoute.post("/login", async (req:Request, res:Response)=> {
   }
 
   try {
+
     let loginCheck:any = 
     await Marketeer
     .find({email: req.body.email, password: req.body.password})
@@ -62,15 +62,30 @@ marketeerRoute.post("/login", async (req:Request, res:Response)=> {
       }
   } catch (error) {
     response.message = "Error to login"
-    console.log(error);
   }
 
   res.json(response)
 })
 
 
-//update order status
 
+//MIDDLEWARES
+marketeerRoute.use((req:Request, res: Response, next: NextFunction )=>{
+  let response:response = {
+      status : false,
+      message : "Insufficent Permissions"
+    }
+
+  if (req.body.auth_payload.authority == "A1" || req.body.auth_payload.authority == "A3") { 
+      res.json(response)
+  }
+})
+
+
+
+
+
+//update order status
 marketeerRoute.post("/order_status", async (req:Request, res:Response)=> {
   let response:response = {
     status : false,
@@ -81,6 +96,8 @@ marketeerRoute.post("/order_status", async (req:Request, res:Response)=> {
   let status = req.body.status
 
   try {
+    if (req.body.auth_payload.authority != "A2") { throw new Error }
+
     if (typeof status != 'number') {
       throw `The status must be a number, but instead recieved status of type ${typeof status}`
     }
