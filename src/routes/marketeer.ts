@@ -127,6 +127,35 @@ marketeerRoute.post("/order_status", async (req:Request, res:Response)=> {
 })
 
 
+marketeerRoute.post("/my_jobs", async (req:Request, res:Response)=> {
+
+  let response:response = {
+    status : false,
+    message : "Unable to fetch your jobs, please try later!"
+  }
+  let _id = req.body._id
+
+  try {
+    if (req.body.auth_payload.authority != "A3") { throw new Error }
+    if (req.body.auth_payload._id != _id) { throw new Error }
+
+    await Order.find({order_processed_by: _id})
+    .then((data)=>{
+      response.status = true
+      response.message = "Bingo!"
+      response.data = data
+    })
+    .catch(()=>{throw new Error})
+  } catch (error) {
+    response.status = false
+    response.message = "Something went worng, please try again"
+  }
+
+  res.json(response)
+
+})
+
+
 
 export default marketeerRoute
 
