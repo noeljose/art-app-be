@@ -1,10 +1,11 @@
 import express, {Request, Response, Application} from "express"
 import {response, product} from "../types";
 import {empty} from "../lib/common"
-import {SchemaTypes} from "mongoose"
 import multer, {} from "multer"
 import { v4 as uuid } from "uuid"
 import fs from "fs"
+import cors from "cors"
+import {validate_token} from "../functions"
 
 const products: Application = express()
 
@@ -12,7 +13,8 @@ const products: Application = express()
 
 //MIDDLEWARES
 
-
+products.use(cors())
+products.use(validate_token)
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -37,8 +39,7 @@ const storage = multer.diskStorage({
 
 
 
-
-  const upload = multer({ storage: storage })
+const upload = multer({ storage: storage })
 
 //MODELS
 import Category from "../models/Category"

@@ -1,11 +1,14 @@
 import express, {Request, Response, Application, NextFunction} from "express"
 import {response, product, distributer} from "../types";
 import jwt from "jsonwebtoken"
+import cors from "cors"
+import {validate_token} from "../functions"
 
 const distributerRoute: Application = express()
 
 
-
+//MIDDLEWARES
+distributerRoute.use(cors())
 
 //MODELS
 import Distributer from "../models/Distributer"
@@ -75,6 +78,7 @@ distributerRoute.post("/login", async (req:Request, res:Response)=> {
 
 
 //MIDDLEWARES
+distributerRoute.use(validate_token)
 distributerRoute.use((req:Request, res: Response, next: NextFunction )=>{
   let response:response = {
       status : false,

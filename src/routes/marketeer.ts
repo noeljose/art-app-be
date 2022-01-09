@@ -1,10 +1,12 @@
 import express, {Request, Response, Application, NextFunction} from "express"
 import {response, product, marketeer} from "../types";
 import jwt from "jsonwebtoken"
+import cors from "cors"
+import {validate_token} from "../functions"
 
 const marketeerRoute: Application = express()
 
-
+marketeerRoute.use(cors())
 
 //MODELS
 import Marketeer from "../models/Marketeer"
@@ -70,6 +72,8 @@ marketeerRoute.post("/login", async (req:Request, res:Response)=> {
 
 
 //MIDDLEWARES
+
+marketeerRoute.use(validate_token)
 marketeerRoute.use((req:Request, res: Response, next: NextFunction )=>{
   let response:response = {
       status : false,

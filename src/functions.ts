@@ -9,12 +9,10 @@ export async function validate_token(req:Request, res:Response, next:NextFunctio
         status : false,
         message : "API ACCESS DENIED"
     }
-    
 
-    try {
-        let bare_token:string[] = (req.headers.authorization)!.split(" ")
+    try {      
+        let bare_token:any = (req.headers.authorization)!.split(" ")
         let token = bare_token[bare_token.length-1]
-
         if (typeof token == 'string') {
             
              jwt.verify(token, process.env.JWT_PASS!, (error:any, decoded:any)=>{
@@ -22,17 +20,11 @@ export async function validate_token(req:Request, res:Response, next:NextFunctio
                 req.body.auth_payload = decoded
             })
         }
-        
-    } catch (error) {
-        console.log(error);
-        
+    } catch (error) {           
         return res.json(response)
-        
     }
 
     next()
-    
-
 }
 
 

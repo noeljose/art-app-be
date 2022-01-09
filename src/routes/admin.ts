@@ -3,12 +3,14 @@ import {response, product, marketeer, distributer} from "../types";
 import {empty} from "../lib/common"
 import multer, {} from "multer"
 import { v4 as uuid } from "uuid"
+import cors from "cors"
+import {validate_token} from "../functions"
 
 const admin: Application = express()
 
 //MIDDLEWARES
-
-
+admin.use(cors())
+admin.use(validate_token)
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
       cb(null, './images/')
@@ -28,7 +30,7 @@ const storage = multer.diskStorage({
   
       cb(null, file_name)
     },
-  })
+})
 
 
 const upload = multer({ storage: storage })
@@ -171,9 +173,6 @@ admin.post("/marketeer/delete", async (req:Request, res:Response)=>{
 
   res.json(response)
 })
-
-
-
 
 //CREATE DISTRIBUTER
 admin.post("/distributer/create", async (req:Request, res:Response)=>{

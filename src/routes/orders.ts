@@ -1,10 +1,14 @@
 import express, {Request, Response, Application, NextFunction} from "express"
 import {response, product, distributer, orderType} from "../types";
 import jwt from "jsonwebtoken"
+import cors from "cors"
+import {validate_token} from "../functions"
 
 const order: Application = express()
 
 //MIDDLEWARES
+order.use(cors())
+order.use(validate_token)
 order.use((req:Request, res: Response, next: NextFunction )=>{
     let response:response = {
         status : false,

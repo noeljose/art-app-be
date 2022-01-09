@@ -10,8 +10,20 @@ const app: Application = express()
 
 //MIDDLEWARES
 app.use(express.json())
-app.use(validate_token)
 app.use(cors())
+
+app.get("/token", async (req, res)=>{
+    res.send(jwt.sign(JSON.stringify({
+        name: "name",
+        phone: "phone",
+        email: "email",  
+        basePrice: "basePrice",
+        _id : "_id", 
+        authority:"A2"
+    }), process.env.JWT_PASS!))
+})
+
+app.use(validate_token)
 
 
 //Routes
@@ -20,10 +32,6 @@ import admin from "./routes/admin"
 import distributer from "./routes/distributer"
 import order from "./routes/orders"
 import marketeer  from "./routes/marketeer"
-
-
-
-
 
 
 //ROUTES
@@ -36,7 +44,6 @@ app.use("/products", products)
 
 
 mongo.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.lgzgs.mongodb.net/artpoint?retryWrites=true&w=majority`)
-
 .then(()=> {console.log("connected")})
 .catch( () => {console.log("Somthing went wrong, Try again later")})
 
@@ -46,8 +53,5 @@ app.get("/", (req, res)=> {
 })
 
 
-app.get("/token", async (req, res)=>{
-    res.send(jwt.sign("testtoken", process.env.JWT_PASS!))
-})
 
 app.listen(process.env.PORT, ()=>{console.log('running at http://127.0.0.1:'+process.env.PORT)})
