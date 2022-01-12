@@ -9,16 +9,16 @@ const order: Application = express()
 //MIDDLEWARES
 order.use(cors())
 order.use(validate_token)
-order.use((req:Request, res: Response, next: NextFunction )=>{
-    let response:response = {
-        status : false,
-        message : "Insufficent Permissions"
-      }
+// order.use((req:Request, res: Response, next: NextFunction )=>{
+//     let response:response = {
+//         status : false,
+//         message : "Insufficent Permissions"
+//       }
 
-    if (req.body.auth_payload.authority) { 
-        res.json(response)
-    }
-})
+//     if (req.body.auth_payload.authority) { 
+//         res.json(response)
+//     }
+// })
 
 //MODELS
 import Order from "../models/Order"

@@ -5,6 +5,8 @@ import {response} from "./types"
 
 //Token Validator
 export async function validate_token(req:Request, res:Response, next:NextFunction){
+    console.log(__filename);
+    
     let response: response = {
         status : false,
         message : "API ACCESS DENIED"

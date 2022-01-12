@@ -74,16 +74,16 @@ marketeerRoute.post("/login", async (req:Request, res:Response)=> {
 //MIDDLEWARES
 
 marketeerRoute.use(validate_token)
-marketeerRoute.use((req:Request, res: Response, next: NextFunction )=>{
-  let response:response = {
-      status : false,
-      message : "Insufficent Permissions"
-    }
+// marketeerRoute.use((req:Request, res: Response, next: NextFunction )=>{
+//   let response:response = {
+//       status : false,
+//       message : "Insufficent Permissions"
+//     }
 
-  if (req.body.auth_payload.authority == "A1" || req.body.auth_payload.authority == "A3") { 
-      res.json(response)
-  }
-})
+//   if (req.body.auth_payload.authority == "A1" || req.body.auth_payload.authority == "A3") { 
+//       res.json(response)
+//   }
+// })
 
 
 

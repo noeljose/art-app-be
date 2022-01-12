@@ -80,16 +80,16 @@ distributerRoute.post("/login", async (req:Request, res:Response)=> {
 
 //MIDDLEWARES
 distributerRoute.use(validate_token)
-distributerRoute.use((req:Request, res: Response, next: NextFunction )=>{
-  let response:response = {
-      status : false,
-      message : "Insufficent Permissions"
-    }
+// distributerRoute.use((req:Request, res: Response, next: NextFunction )=>{
+//   let response:response = {
+//       status : false,
+//       message : "Insufficent Permissions"
+//     }
 
-  if (req.body.auth_payload.authority == "A1" || req.body.auth_payload.authority == "A2") { 
-      res.json(response)
-  }
-})
+//   if (req.body.auth_payload.authority == "A1" || req.body.auth_payload.authority == "A2") { 
+//       res.json(response)
+//   }
+// })
 
 
 
