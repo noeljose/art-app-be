@@ -23,7 +23,7 @@ app.get("/token", async (req, res)=>{
     }), process.env.JWT_PASS!))
 })
 
-app.use(validate_token)
+
 
 
 //Routes
