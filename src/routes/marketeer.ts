@@ -65,25 +65,13 @@ marketeerRoute.post("/login", async (req:Request, res:Response)=> {
   } catch (error) {
     response.message = "Error to login"
   }
-
+  console.log(response);
+  
   res.json(response)
 })
 
 
 
-//MIDDLEWARES
-
-marketeerRoute.use(validate_token)
-// marketeerRoute.use((req:Request, res: Response, next: NextFunction )=>{
-//   let response:response = {
-//       status : false,
-//       message : "Insufficent Permissions"
-//     }
-
-//   if (req.body.auth_payload.authority == "A1" || req.body.auth_payload.authority == "A3") { 
-//       res.json(response)
-//   }
-// })
 
 
 
@@ -100,7 +88,7 @@ marketeerRoute.post("/order_status", async (req:Request, res:Response)=> {
   let status = req.body.status
 
   try {
-    if (req.body.auth_payload.authority != "A2") { throw new Error }
+
 
     if (typeof status != 'number') {
       throw `The status must be a number, but instead recieved status of type ${typeof status}`
@@ -136,8 +124,7 @@ marketeerRoute.post("/my_jobs", async (req:Request, res:Response)=> {
   let _id = req.body._id
 
   try {
-    if (req.body.auth_payload.authority != "A3") { throw new Error }
-    if (req.body.auth_payload._id != _id) { throw new Error }
+
 
     await Order.find({order_processed_by: _id})
     .then((data)=>{

@@ -10,7 +10,7 @@ const admin: Application = express()
 
 //MIDDLEWARES
 admin.use(cors())
-admin.use(validate_token)
+// admin.use(validate_token)
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
       cb(null, './images/')
