@@ -14,7 +14,6 @@ const products: Application = express()
 //MIDDLEWARES
 
 products.use(cors())
-products.use(validate_token)
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
