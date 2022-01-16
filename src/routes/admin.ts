@@ -38,6 +38,7 @@ const upload = multer({ storage: storage })
 //MODELS
 import Marketeer from "../models/Marketeer";
 import Distributer from "../models/Distributer"
+import Order from "../models/Order"
 
 
 //CREATE SALESMAN
@@ -125,6 +126,36 @@ admin.post("/marketeer/read", async (req:Request, res:Response)=>{
   res.json(response)
 })
 
+//ASSIGN SALESMAN
+admin.post("/marketeer/assign", async (req:Request, res:Response)=>{
+  let response:response = {
+    status : false,
+    message : "Somthing went wrong"
+  }
+
+  let marketeer_id = req.body.marketeer_id
+  let order_id = req.body.order_id
+
+  try {
+    await Order.findByIdAndUpdate(
+      order_id, 
+      {
+        $set: {order_processed_by: marketeer_id, status: 1 }
+      })
+
+    .then(()=>{
+      response.status = true
+      response.message = "Sales person assigned successfully"
+
+    })
+    .catch((error:any) => {throw new Error})
+  } catch (error) {
+    response.status = false
+    response.message = "Sales person assign failed!"
+  }
+
+  res.json(response)
+})
 //READ SALESMAN SINGLE
 admin.post("/marketeer/read/:id", async (req:Request, res:Response)=>{
   let response:response = {
