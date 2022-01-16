@@ -19,8 +19,6 @@ distributerRoute.post("/login", async (req:Request, res:Response)=> {
 
   let email = req.body.email 
   let password = req.body.password
-  
-
   let response:response = {
     status : false,
     message : "Unable to login, please check the login credentials!"
@@ -33,27 +31,26 @@ distributerRoute.post("/login", async (req:Request, res:Response)=> {
     .catch(()=>{throw new Error})
   
     !loginCheck[0].email ? response.message = 'This account, does not exist.' : null;
-
-    console.log(loginCheck);
     
-  
       if (loginCheck[0].email  == email  && loginCheck[0].password == password) {
         
         let data:distributer = {
-      
           name: loginCheck[0].name,
           phone: loginCheck[0].phone,
           email: loginCheck[0].email,  
           basePrice: loginCheck[0].basePrice
         }
         
-        let token = jwt.sign({...data, _id : loginCheck[0]._id, authority:'A3'}, process.env.JWT_PASS!, {
-          expiresIn: '8h'
-        })
+        let token = 
+        jwt.sign({...data, _id : loginCheck[0]._id, authority:'A3'}, process.env.JWT_PASS!,{ expiresIn: '8h'})
     
-        if (loginCheck.active == false) {
-          response.message = "The account is not active at the moment, please contact your adminstrator"
-        }else {
+        if (loginCheck.active == false) 
+        {response.message = "The account is not active at the moment, please contact your adminstrator"}
+
+        else 
+        {
+          console.log("Thsi is id: "+  loginCheck[0]._id);
+          
           response.status = true
           response.message = 'Login successful'
           response.data = {
@@ -61,16 +58,14 @@ distributerRoute.post("/login", async (req:Request, res:Response)=> {
             name: loginCheck[0].name,
             phone: loginCheck[0].phone,
             email: loginCheck[0].email,  
+            address: loginCheck[0].address, 
             token : token
           }
         }
-      }
-  } catch (error) {
-    response.message = "Error to login"
-    console.log(error);
-    
-  }
 
+      }
+  } 
+  catch (error) {response.message = "Error to login"}
 
 
   res.json(response)
@@ -92,20 +87,27 @@ distributerRoute.post("/update" , async (req:Request, res:Response)=>{
   let _id = req.body._id
 
 
+
   let data:distributer = {
-    name: req.body.name,
-    phone: req.body.phone,
-    email: req.body.email,
-    address : req.body.address
+    name: req.body.details.name,
+    phone: req.body.details.phone,
+    email: req.body.details.email,
+    address : req.body.details.address
   }
 
   try {
 
     
-    Distributer.findByIdAndUpdate(_id, data)
-    .then(function(){ 
+    await Distributer.findByIdAndUpdate(_id, data)
+    .then(function(res){ 
       response.status = true;
       response.message = "Data Updated successfully!";
+      response.data = {
+        name: res.name,
+        email:res.email,
+        phone: res.phone,
+        address: res.address
+      }
     })
     .catch(function(){
       throw new Error;
@@ -120,6 +122,43 @@ distributerRoute.post("/update" , async (req:Request, res:Response)=>{
 
 })
 
+distributerRoute.post("/update_password" , async (req:Request, res:Response)=>{
+
+  
+
+  let response:response = {
+    status : false,
+    message : "Unable to update the password, please try later!"
+  }
+
+  let _id = req.body._id
+  let password = {
+    new_password: req.body.new_password,
+    old_password: req.body.old_password
+  }
+
+  try {
+
+    await Distributer.findOneAndUpdate({_id, password: password.old_password},{
+      $set:{
+        password: password.new_password
+      }
+    })
+    .then(function(res){ 
+      response.status = true;
+      response.message = "Password Updated successfully!";
+    })
+    .catch(function(){
+      throw new Error;
+    })
+  } catch (error) {
+    response.message = "Error occured while updating password, try again"
+  }
+  console.log(response);
+  
+
+  res.json(response)
+})
 
 
 distributerRoute.post("/read", async (req:Request, res:Response)=> {
@@ -130,10 +169,14 @@ distributerRoute.post("/read", async (req:Request, res:Response)=> {
   }
   let _id = req.body._id
 
+  console.log(_id);
+  
+
   try {
 
     await Distributer.findById(_id)
     .then((data)=>{
+        
       response.status = true
       response.message = "Bingo!"
       response.data = data
@@ -143,6 +186,9 @@ distributerRoute.post("/read", async (req:Request, res:Response)=> {
     response.status = false
     response.message = "Something went worng, please try again"
   }
+
+
+  
 
   res.json(response)
 

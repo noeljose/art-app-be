@@ -22,6 +22,11 @@ app.get("/token", async (req, res)=>{
         authority:"A2"
     }), process.env.JWT_PASS!))
 })
+app.post("/test", async (req, res)=>{
+    console.log('recieved');
+    
+    res.json({...req.body})
+})
 
 
 
