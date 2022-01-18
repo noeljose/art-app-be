@@ -218,12 +218,18 @@ admin.post("/distributer/create", async (req:Request, res:Response)=>{
     email : req.body.email,
     password : req.body.password,
     basePrice : req.body.basePrice,
-    deliveryPrice : req.body.deliveryPrice
+    deliveryPrice : req.body.deliveryPrice,
+    address: "No address Provided yet"
     
   }
 
+  req.body.address?data.address = req.body.address: null;
+
+
+
   try {
-    await Distributer.create(data).catch((error:any) => {throw new Error})
+    await Distributer.create(data).catch((error:any) => {console.log(error);
+    throw new Error})
     response.status = true
     response.message = "Distributer creation successful"
   } catch (error:any) {
@@ -249,7 +255,8 @@ admin.post("/distributer/update", async (req:Request, res:Response)=>{
     email : req.body.email,
     active : req.body.active,
     basePrice : req.body.basePrice,
-    deliveryPrice : req.body.deliveryPrice
+    deliveryPrice : req.body.deliveryPrice,
+    address : req.body.address
   }
 
   try {

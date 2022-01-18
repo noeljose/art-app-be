@@ -72,9 +72,118 @@ marketeerRoute.post("/login", async (req:Request, res:Response)=> {
 
 
 
+marketeerRoute.post("/update" , async (req:Request, res:Response)=>{
+
+
+  let response:response = {
+    status : false,
+    message : "Unable to update, please try later!"
+  }
+
+  let _id = req.body._id
+
+  let data:marketeer = {
+    name: req.body.details.name,
+    phone: req.body.details.phone,
+    email: req.body.details.email
+  }
+
+  try {
+
+    
+    await Marketeer.findByIdAndUpdate(_id, data)
+    .then(function(res){ 
+      response.status = true;
+      response.message = "Data Updated successfully!";
+      response.data = {
+        name: res.name,
+        email:res.email,
+        phone: res.phone,
+        address: res.address
+      }
+    })
+    .catch(function(){
+      throw new Error;
+    })
+  } catch (error) {
+    response.message = "Error occured while updating, try again"
+  }
 
 
 
+  res.json(response)
+
+})
+
+
+marketeerRoute.post("/update_password" , async (req:Request, res:Response)=>{
+
+  
+
+  let response:response = {
+    status : false,
+    message : "Unable to update the password, please try later!"
+  }
+
+  let _id = req.body._id
+  let password = {
+    new_password: req.body.new_password,
+    old_password: req.body.old_password
+  }
+
+  try {
+
+    await Marketeer.findOneAndUpdate({_id, password: password.old_password},{
+      $set:{
+        password: password.new_password
+      }
+    })
+    .then(function(res){ 
+      response.status = true;
+      response.message = "Password Updated successfully!";
+    })
+    .catch(function(){
+      throw new Error;
+    })
+  } catch (error) {
+    response.message = "Error occured while updating password, try again"
+  }
+ 
+
+  res.json(response)
+})
+
+
+marketeerRoute.post("/my_jobs", async (req:Request, res:Response)=> {
+
+  let response:response = {
+    status : false,
+    message : "Unable to fetch your jobs, please try later!"
+  }
+  let _id = req.body._id
+
+  try {
+
+
+    await Order.find({order_processed_by: _id})
+    .then((data)=>{
+      response.status = true
+      response.message = "Bingo!"
+      response.data = data
+    })
+    .catch(()=>{throw new Error})
+  } catch (error) {
+    response.status = false
+    response.message = "Something went worng, please try again"
+  }
+
+  res.json(response)
+
+})
+
+
+
+export default marketeerRoute
 
 
 // //update order status
@@ -113,36 +222,3 @@ marketeerRoute.post("/login", async (req:Request, res:Response)=> {
 //   res.json(response)
 
 // })
-
-
-marketeerRoute.post("/my_jobs", async (req:Request, res:Response)=> {
-
-  let response:response = {
-    status : false,
-    message : "Unable to fetch your jobs, please try later!"
-  }
-  let _id = req.body._id
-
-  try {
-
-
-    await Order.find({order_processed_by: _id})
-    .then((data)=>{
-      response.status = true
-      response.message = "Bingo!"
-      response.data = data
-    })
-    .catch(()=>{throw new Error})
-  } catch (error) {
-    response.status = false
-    response.message = "Something went worng, please try again"
-  }
-
-  res.json(response)
-
-})
-
-
-
-export default marketeerRoute
-

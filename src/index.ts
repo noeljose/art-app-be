@@ -46,6 +46,7 @@ app.use("/distributer", distributer)
 app.use("/marketeer", marketeer)
 app.use("/order", order)
 app.use("/products", products)
+app.use("/product_images", express.static("images"))
 
 
 mongo.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.lgzgs.mongodb.net/artpoint?retryWrites=true&w=majority`)

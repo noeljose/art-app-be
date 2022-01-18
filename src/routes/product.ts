@@ -256,7 +256,7 @@ products.post("/update", async (req : Request, res: Response)=>{
 })
 
 // List products
-products.post("/list", async (req, res)=>{
+products.post("/search", async (req, res)=>{
 
     let skip = req.body.skip
     let limit = req.body.limit
@@ -341,13 +341,10 @@ products.post("/delete/:id", async (req: Request, res: Response)=>{
 })
 
 // Search
-products.post("/search", async (req, res)=>{
+products.get("/list_product", async (req, res)=>{
 
   
-   let search = {
-     
-     title: { $regex: req.body.title , $options : "i" } 
-   }
+
 
    let response : response = {
     status : false,
@@ -356,8 +353,7 @@ products.post("/search", async (req, res)=>{
 
    
    try {
-       let data = await Product.find( search )
-console.log(search);
+       let data = await Product.find().limit(10)
 
       
            response.data = data
@@ -368,6 +364,7 @@ console.log(search);
        response.message = "Somthing went wrong"
    }
 
+   
    res.json(response)
 })
 

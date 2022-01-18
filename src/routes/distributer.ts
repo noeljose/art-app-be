@@ -48,9 +48,7 @@ distributerRoute.post("/login", async (req:Request, res:Response)=> {
         {response.message = "The account is not active at the moment, please contact your adminstrator"}
 
         else 
-        {
-          console.log("Thsi is id: "+  loginCheck[0]._id);
-          
+        {        
           response.status = true
           response.message = 'Login successful'
           response.data = {
