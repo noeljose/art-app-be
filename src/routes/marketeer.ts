@@ -83,9 +83,9 @@ marketeerRoute.post("/update" , async (req:Request, res:Response)=>{
   let _id = req.body._id
 
   let data:marketeer = {
-    name: req.body.details.name,
-    phone: req.body.details.phone,
-    email: req.body.details.email
+    name: req.body.name,
+    phone: req.body.phone,
+    email: req.body.email
   }
 
   try {
