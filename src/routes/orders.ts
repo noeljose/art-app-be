@@ -33,11 +33,10 @@ order.post("/place", async (req:Request, res: Response) =>{
             message :   req.body.order_details.message
         },
         order_placed_by : req.body.order_placed_by,
-        order_processed_by :req.body.order_processed_by,
         shipping_address :  req.body.shipping_address,
         status : 0,
-        category : req.body.category,
-        subCategory :  req.body.subCategory
+        // category : req.body.category,
+        // subCategory :  req.body.subCategory
     }
 
     try {

@@ -367,5 +367,78 @@ products.get("/list_product", async (req, res)=>{
    
    res.json(response)
 })
+// Search
+products.post("/list", async (req, res)=>{
+
+  
+
+
+   let response : response = {
+    status : false,
+    message : "Somthing went wrong"
+}
+
+   
+   try {
+       let data = await Product.find()
+
+      
+           response.data = data
+           response.status = true
+           response.message = "Data Fetched sucessfully"
+       
+   } catch (error) {
+       response.message = "Somthing went wrong"
+   }
+
+   
+   res.json(response)
+})
+
+// Search By Category
+products.post("/list_by_category", async (req, res)=>{
+
+   let response : response = {
+        status : false,
+        message : "Somthing went wrong"
+    }
+
+    let skip = req.body.skip
+
+    let query:any = {}
+
+    req.body.category? query.category = req.body.category: null
+    req.body.subCategory? query.subCategory = req.body.subCategory: null
+
+   
+   try {
+
+    if ( !req.body.category &&  !req.body.category) {
+        throw new Error("Please select the category");
+        
+    }
+    console.log(query);
+    
+
+       let dataLength = await Product.find(query).countDocuments()
+       let data = await Product.find(query)
+       .skip(skip).limit(10)
+console.log(data, skip);
+
+      
+           response.data = data
+           response.status = true
+           response.message = "Data Fetched sucessfully"
+           response.metadata = {
+               resultCount: dataLength
+           }
+       
+   } catch (error) {
+       response.message = "Somthing went wrong"
+   }
+
+   
+   res.json(response)
+})
 
 export default products

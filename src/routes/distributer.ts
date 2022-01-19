@@ -152,8 +152,6 @@ distributerRoute.post("/update_password" , async (req:Request, res:Response)=>{
   } catch (error) {
     response.message = "Error occured while updating password, try again"
   }
-  console.log(response);
-  
 
   res.json(response)
 })

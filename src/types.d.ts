@@ -6,7 +6,8 @@ export type response =  {
     status: boolean,
     message: string,
     data?: object | array,
-    backError? : any
+    backError? : any,
+    metadata?: any
 }
 
 export type product = {

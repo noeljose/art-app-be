@@ -133,7 +133,7 @@ marketeerRoute.post("/update_password" , async (req:Request, res:Response)=>{
 
   try {
 
-    await Marketeer.findOneAndUpdate({_id, password: password.old_password},{
+    await Marketeer.findByIdAndUpdate({_id, password: password.old_password},{
       $set:{
         password: password.new_password
       }
