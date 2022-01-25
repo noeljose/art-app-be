@@ -115,6 +115,45 @@ marketeerRoute.post("/update" , async (req:Request, res:Response)=>{
 
 })
 
+marketeerRoute.post("/list" , async (req:Request, res:Response)=>{
+
+
+  let response:response = {
+    status : false,
+    message : "Unable to update, please try later!"
+  }
+
+  let _id = req.body._id
+
+
+
+  try {
+
+    
+    await Marketeer.findById(_id)
+    .then(function(res){ 
+      response.status = true;
+      response.message = "Data Fetched successfully!";
+      response.data = {
+        name: res.name,
+        email:res.email,
+        phone: res.phone,
+        address: res.address
+      }
+    })
+    .catch(function(){
+      throw new Error;
+    })
+  } catch (error) {
+    response.message = "Error occured while fetching, try again"
+  }
+
+
+
+  res.json(response)
+
+})
+
 
 marketeerRoute.post("/update_password" , async (req:Request, res:Response)=>{
 
@@ -125,15 +164,20 @@ marketeerRoute.post("/update_password" , async (req:Request, res:Response)=>{
     message : "Unable to update the password, please try later!"
   }
 
-  let _id = req.body._id
+  let id = req.body._id
   let password = {
     new_password: req.body.new_password,
     old_password: req.body.old_password
   }
 
+  console.log(
+    {_id:id, password: password.old_password}
+  );
+  
+
   try {
 
-    await Marketeer.findByIdAndUpdate({_id, password: password.old_password},{
+    await Marketeer.findOneAndUpdate({ password: password.old_password,_id:id},{
       $set:{
         password: password.new_password
       }

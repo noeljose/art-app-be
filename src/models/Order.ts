@@ -28,12 +28,12 @@ const OrderSchema = new mongo.Schema({
     
     order_processed_by : {
         type : String,
-        required: true
+        required: false
     },
 
     shipping_address : {
         type : String,
-        required: true
+        required: false
     },
 
     status : {
@@ -43,12 +43,12 @@ const OrderSchema = new mongo.Schema({
 
     category : {
         type : String,
-        required: true
+        required:false
     },
 
     subCategory : {
         type : String,
-        required: true
+        required: false
     }
 })
 

@@ -46,9 +46,15 @@ order.post("/place", async (req:Request, res: Response) =>{
             response.status = true
             response.message = "Order placed successfully"
         }).
-        catch(() => { throw new Error})
+        catch((err) => { 
+            console.log(err);
+            
+            throw new Error
+        })
 
     } catch (error) {
+        // console.log(error);
+        
         
         response.message = "Somthing went wrong while placing the order!"
     }
