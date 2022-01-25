@@ -1,9 +1,9 @@
-import "dotenv/config"
-import express ,{Request, Response, NextFunction, Application} from "express"
+import dotenv from "dotenv"
+dotenv.config({path: __dirname + '/../.env'})
+import express ,{Application} from "express"
 import mongo from "mongoose"
 import cors from "cors"
-import jwt from "jsonwebtoken"
-import {validate_token} from "./functions"
+
 
 
 const app: Application = express()
@@ -11,25 +11,6 @@ const app: Application = express()
 //MIDDLEWARES
 app.use(express.json())
 app.use(cors())
-
-app.get("/token", async (req, res)=>{
-    res.send(jwt.sign(JSON.stringify({
-        name: "name",
-        phone: "phone",
-        email: "email",  
-        basePrice: "basePrice",
-        _id : "_id", 
-        authority:"A2"
-    }), process.env.JWT_PASS!))
-})
-app.post("/test", async (req, res)=>{
-    console.log('recieved');
-    
-    res.json({...req.body})
-})
-
-
-
 
 //Routes
 import products from "./routes/product"
@@ -51,12 +32,13 @@ app.use("/product_images", express.static("images"))
 
 mongo.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.lgzgs.mongodb.net/artpoint?retryWrites=true&w=majority`)
 .then(()=> {console.log("connected")})
-.catch( () => {console.log("Somthing went wrong, Try again later")})
+.catch( (err) => {console.log("Somthing went wrong, Try again later")})
 
 
 app.get("/", (req, res)=> {
     res.send("WELCOME TO THE PROJECT API")
 })
+
 
 
 
