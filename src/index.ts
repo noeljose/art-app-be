@@ -10,8 +10,9 @@ const app: Application = express()
 
 //MIDDLEWARES
 app.use(express.json())
-app.use(cors())
-
+app.use(cors({
+    origin: "*"
+}))
 //Routes
 import products from "./routes/product"
 import admin from "./routes/admin"
@@ -30,6 +31,8 @@ app.use("/products", products)
 app.use("/product_images", express.static("images"))
 
 
+
+
 mongo.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.lgzgs.mongodb.net/artpoint?retryWrites=true&w=majority`)
 .then(()=> {console.log("connected")})
 .catch( (err) => {console.log("Somthing went wrong, Try again later")})
@@ -38,7 +41,6 @@ mongo.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@clust
 app.get("/", (req, res)=> {
     res.send("WELCOME TO THE PROJECT API")
 })
-
 
 
 
